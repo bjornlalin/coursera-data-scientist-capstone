@@ -1,0 +1,130 @@
+---
+title: "Milestone report - week 2"
+author: "MOOC User"
+date: "2/1/2020"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+setwd("/Users/mooc/Documents/coursera-data-scientist/10-capstone-project/week-2-milestone-report/")
+
+```
+
+## Introduction
+
+This is a milestone report for the Coursera online course "Data Scientist" capstone project. The goal of the project is to develop a prediction model using NLP to suggest words for user input based on the text already entered, as is often implemented on mobile devices by for example SwiftKey, who also provide the task and training data for the project.
+
+This milestone report describes some basic exploratory analysis of the dataset, which contains data from blogs, newspaper articles and tweets. The dataset provides files in english, german, finnish and russian, this analysis only uses the german dataset.
+
+## Exploratory analysis
+
+The basic statistics of each file was extracted using the commands tool `wc -w`, `wc -l` and `ls -lha` available on unix/linux/mac operating systems.
+
+| File                |  size |   lines |      words |
+|---------------------|-------|---------|------------|
+| `de_DE.blogs.txt`   | 82 MB | 371'440 | 12'653'185 |
+| `de_DE.news.txt`    | 91 MB | 244'743 | 13'219'388 |
+| `de_DE.twitter.txt` | 72 MB | 947'774 | 11'803'735 |
+
+### Summary statistics
+
+The three datasets can be expected to have fairly different characteristics, therefore we provide summary statistics and plots separately for each dataset. To cleanup the files we transform all words to lowercase and remove any non-alphanumerical characters. 
+We calculate summary statistics and perform the initial exploratory analysis on the entire dataset instead of a smaller random sample, as was suggested by the assignment description. This is fully doable on a modern computer and the analyses performed for this milestone report. 
+
+As the plots below shows, the distribution of the number of words in each dataset is very different - of course also due to the limitation on the length of tweets.
+
+```{r load training data, warning = F, message = F, echo = F}
+
+lines_blogs <- readLines("../data/final/de_DE/de_DE.blogs.txt", encoding = "UTF8")
+lines_news <- readLines("../data/final/de_DE/de_DE.news.txt", encoding = "UTF8")
+lines_twitter <- readLines("../data/final/de_DE/de_DE.twitter.txt", encoding = "UTF8")
+```
+
+```{r summary statistics, warning = F, message = F, echo = F}
+
+library(dplyr)
+library(stringi)
+library(stringr)
+
+df.blogs <- data.frame(lines_blogs, sapply(lines_blogs, function(line) stri_count_words(line)), 'blogs', row.names = NULL)
+df.news <- data.frame(lines_news, sapply(lines_news, function(line) stri_count_words(line)), 'news', row.names = NULL)
+df.twitter <- data.frame(lines_twitter, sapply(lines_twitter, function(line) stri_count_words(line)), 'twitter', row.names = NULL)
+
+colnames(df.blogs) = c('text', 'words', 'dataset')
+colnames(df.news) = c('text', 'words', 'dataset')
+colnames(df.twitter) = c('text', 'words', 'dataset')
+
+# Cleanup
+df <- rbind(df.blogs, df.news, df.twitter) %>%
+  mutate(text = tolower(text)) %>%
+  mutate(text = str_replace_all(text, "[^a-z0-9 ]+", "")) %>%
+  mutate(text = str_replace_all(text, " +", " "))
+
+# Calculate summary statistics
+df %>% 
+  group_by(dataset) %>%
+  summarize(min = min(words, na.rm = T), 
+            max = max(words, na.rm = T), 
+            mean = mean(words, na.rm = T), 
+            median = median(words, na.rm = T)) -> df.means
+
+# Plot distribution of words
+hist(df.blogs$words, breaks = 150, xlim = c(0, 500), main = 'Distribution of words for blog posts', xlab = '# words')
+hist(df.news$words, breaks = 50, xlim = c(0, 500), main = 'Distribution of words for news articles', xlab = '# words')
+hist(df.twitter$words, breaks = 50, main = 'Distribution of words for tweets', xlab = '# words')
+
+```
+
+* The blog post dataset has an average of `r df.means[df.means$dataset == 'blogs', ]$mean` words
+* The news article dataset has an average of `r df.means[df.means$dataset == 'news', ]$mean` words
+* The twitter dataset has an average of `r df.means[df.means$dataset == 'twitter', ]$mean` words
+
+In a second step we investigate which words are most frequent. We can see that most words are stop words which we might not necessarily want to consider. On the other hand such words could also be predicted and, since they are so frequent, they would also be important to include. This decision is left open for a later phase of the project.
+
+This analysis was performed using the `tm` package.
+
+```{r data cleanup and most frequent words, warning = F, message = F, echo = F}
+
+library(tm)
+library(ggplot2)
+
+generate_top_n = function(name, data, n = 25) {
+  # Generate corpus
+  corpus = SimpleCorpus(VectorSource(data))
+  # Create a matrix mapping documents to terms
+  terms <- TermDocumentMatrix(corpus, control = list(removeNumbers = T, stopwords = T, stemming = F))
+  # Count number of occurances of each word
+  frequency <- slam::row_sums(terms)
+  frequency <- frequency[frequency >= 10]
+  frequency_df <- data.frame(word = names(frequency), freq = frequency , row.names = NULL)
+
+  return(frequency_df[order(frequency_df$freq, decreasing = T), ][0:n, ])
+}
+
+create_plot <- function(name, data) {
+  plot = ggplot(data, aes(x = reorder(word, -freq), y = freq)) +
+    geom_bar(stat = 'identity') + 
+    ggtitle(name) +
+    xlab('Word') + 
+    ylab('Occurances') + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1), 
+          plot.title = element_text(hjust = 0.5))
+
+  return(plot)
+}
+
+top30_blogs = generate_top_n("blogs", lines_blogs, n = 30)
+top30_news = generate_top_n("news", lines_news, n = 30)
+top30_twitter = generate_top_n("twitter", lines_twitter, n = 30)
+
+create_plot("30 most frequent word in blog posts", top30_blogs)
+create_plot("30 most frequent word in news articles", top30_news)
+create_plot("30 most frequent word in Tweets", top30_twitter)
+
+```
+
+## Summary and next steps
+
+In this brief report I have laid out a few basic summary statistics and made myself familiar with the training data. In a next step I plan to define a draft of the prediction algorithm. At this stage I imagine creating a collection of at least all trigrams and bigrams (or at least the ones which are somewhat frequent) and for a given input suggest the next word based on the frequency of any trigrams beginning with the previous two words, then any bigrams beginning with the previous word, and as a fallback the most common word.

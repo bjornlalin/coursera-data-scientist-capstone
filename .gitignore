@@ -1,0 +1,10 @@
+.DS_Store
+
+*.RProj
+.RProj.User/
+.RData
+.Rhistory
+
+readings/
+data/
+.Rproj.user
