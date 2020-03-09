@@ -801,7 +801,7 @@ hljs.initHighlightingOnLoad();
 <ul>
 <li>N-gram language model using bi-, tri- and quad-grams</li>
 <li>Trained on a sample of roughly 170k blog, news and twitter texts</li>
-<li>Shiny application demo application available <a href="https://for-the-course-of-course.shinyapps.io/coursera_capstone_project/">here</a></li>
+<li>Demo application available</li>
 </ul>
 
 </div>
@@ -829,20 +829,28 @@ a sample from the original dataset.</p>
 <section data-transition="linear" data-transition-speed="default">
 <h3>Tools, dataset and additional notes</h3>
 <div class="slideContent" >
-<h4>Tools</h4>
-
-<p>The model was generated using the <a href="https://quanteda.io/">quanteda</a> and <a href="https://cran.r-project.org/web/packages/data.table/">data.table</a> R packages. These two libraries proved very useful and easy to work with, thanks to the community resources available at <a href="http://datasciencespecialization.github.io/">http://datasciencespecialization.github.io/</a> for pointing to these resources.</p>
-
 <h4>Dataset</h4>
 
-<p>The dataset was provided by the Coursera course and contained three distinct datasets: tweets, news articles and blog posts. To generate the training data for the model, I extracted a random sample with 2% of the entries and merged these into a single dataset.</p>
+<ul>
+<li>The dataset was provided by the Coursera course and contained three distinct datasets: tweets, news articles and blog posts. Data in en_US locale was used for this project.</li>
+<li>To generate the training data for the model, I extracted a random sample with 2% of the entries and merged these into a single dataset.</li>
+<li>The data was cleaned by removing extranous whitespaces, special characters, converting all characters to lower-case and removing numbers.</li>
+</ul>
+
+<p>The model was generated using the <a href="https://quanteda.io/">quanteda</a> and <a href="https://cran.r-project.org/web/packages/data.table/">data.table</a> R packages. These two libraries proved very useful and easy to work with, thanks to the community resources available at <a href="http://datasciencespecialization.github.io/">http://datasciencespecialization.github.io/</a> for pointing to these resources.</p>
 
 </div>
 
 </section>
 <section data-transition="linear" data-transition-speed="default">
-<h3>Thank you</h3>
+<h3>Demo application</h3>
 <div class="slideContent" >
+<ul>
+<li>Demo application provides a web interface with a simple text input field, and suggests the next word based on the last three words typed.</li>
+<li>The model loads in a matter of a few seconds.</li>
+<li><a href="https://for-the-course-of-course.shinyapps.io/coursera_capstone_project/">Demo application available here</a></li>
+</ul>
+
 <p>Thank you for your attention.</p>
 
 </div>

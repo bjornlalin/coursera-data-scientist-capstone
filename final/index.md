@@ -31,13 +31,12 @@ The prediction algorithm implements back-off to deal with unseen histories:
 Tools, dataset and additional notes
 ========================================================
 
-<h4>Tools</h4>
-The model was generated using the <a href="https://quanteda.io/">quanteda</a> and <a href="https://cran.r-project.org/web/packages/data.table/">data.table</a> R packages. These two libraries proved very useful and easy to work with, thanks to the community resources available at http://datasciencespecialization.github.io/ for pointing to these resources.
-
 <h4>Dataset</h4>
-* The dataset was provided by the Coursera course and contained three distinct datasets: tweets, news articles and blog posts
-* To generate the training data for the model, I extracted a random sample with 2% of the entries and merged these into a single dataset
-* Data in en_US locale was used for this project
+* The dataset was provided by the Coursera course and contained three distinct datasets: tweets, news articles and blog posts. Data in en_US locale was used for this project.
+* To generate the training data for the model, I extracted a random sample with 2% of the entries and merged these into a single dataset.
+* The data was cleaned by removing extranous whitespaces, special characters, converting all characters to lower-case and removing numbers.
+
+The model was generated using the <a href="https://quanteda.io/">quanteda</a> and <a href="https://cran.r-project.org/web/packages/data.table/">data.table</a> R packages. These two libraries proved very useful and easy to work with, thanks to the community resources available at http://datasciencespecialization.github.io/ for pointing to these resources.
 
 Demo application
 ========================================================
