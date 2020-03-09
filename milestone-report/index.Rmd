@@ -42,6 +42,12 @@ lines_news <- readLines("../data/final/de_DE/de_DE.news.txt", encoding = "UTF8")
 lines_twitter <- readLines("../data/final/de_DE/de_DE.twitter.txt", encoding = "UTF8")
 ```
 
+Next we draw a random sample from each dataset and merge the datasets
+
+```{r sample, warning = F, message = F, echo = F}
+```
+
+
 ```{r summary statistics, warning = F, message = F, echo = F}
 
 library(dplyr)
