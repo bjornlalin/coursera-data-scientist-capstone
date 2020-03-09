@@ -12,7 +12,7 @@ Key features are:
 
 - N-gram language model using bi-, tri- and quad-grams
 - Trained on a sample of roughly 170k blog, news and twitter texts
-- Shiny application demo application available
+- Shiny application demo application available <a href="https://for-the-course-of-course.shinyapps.io/coursera_capstone_project/">here</a>
 
 Algorithm
 ========================================================
