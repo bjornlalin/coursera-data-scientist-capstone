@@ -12,7 +12,7 @@ Key features are:
 
 - N-gram language model using bi-, tri- and quad-grams
 - Trained on a sample of roughly 170k blog, news and twitter texts
-- Shiny application demo application available <a href="https://for-the-course-of-course.shinyapps.io/coursera_capstone_project/">here</a>
+- Demo application available
 
 Algorithm
 ========================================================
@@ -35,9 +35,15 @@ Tools, dataset and additional notes
 The model was generated using the <a href="https://quanteda.io/">quanteda</a> and <a href="https://cran.r-project.org/web/packages/data.table/">data.table</a> R packages. These two libraries proved very useful and easy to work with, thanks to the community resources available at http://datasciencespecialization.github.io/ for pointing to these resources.
 
 <h4>Dataset</h4>
-The dataset was provided by the Coursera course and contained three distinct datasets: tweets, news articles and blog posts. To generate the training data for the model, I extracted a random sample with 2% of the entries and merged these into a single dataset.
+* The dataset was provided by the Coursera course and contained three distinct datasets: tweets, news articles and blog posts
+* To generate the training data for the model, I extracted a random sample with 2% of the entries and merged these into a single dataset
+* Data in en_US locale was used for this project
 
-Thank you
+Demo application
 ========================================================
+
+* Demo application provides a web interface with a simple text input field, and suggests the next word based on the last three words typed.
+* The model loads in a matter of a few seconds.
+* <a href="https://for-the-course-of-course.shinyapps.io/coursera_capstone_project/">Demo application available here</a>
 
 Thank you for your attention.
